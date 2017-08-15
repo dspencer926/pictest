@@ -1,0 +1,65 @@
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+video {
+  margin: 20px;
+  border-radius: 15px;
+}
+
+.btn {
+  display: flex;
+  height: 100px;
+  width: 100px;
+  color: white;
+  background-color: gray;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  border-radius: 15px;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+video{ 
+  z-index: 1;
+}
+
+#video-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#option-box {
+  display: flex;
+  position: absolute;
+  height: 150px;
+  width: 250px;
+  padding: 15px;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  background-color: white;
+  border-radius: 15px;
+}
+
+.option-btn {
+  height: 100px;
+  width: 100px;
+  background-color: lightblue;
+  color: white;
+  margin: 10px;
+}
