@@ -17,7 +17,9 @@ class Welcome extends Component {
       videoDimensions: {},                                                //  dimensions to use for canvas
       countDown: false,                                                   //  counting down to take picture? T/F
       count: null,                                                        //  number shown for count
+      photoArray: [],                                                     //  array of photos to make GIF
       gifConfirm: false,                                                  //  GIF confirm screen T/F 
+      currentGif: null,                                                   //  GIF result 
 
     };  
     this.videoInitialize = this.videoInitialize.bind(this);
@@ -29,7 +31,6 @@ class Welcome extends Component {
     this.gifPic = this.gifPic.bind(this);
     this.confirmPic = this.confirmPic.bind(this);
     var video;
-    var currentGif;
   }
 
   componentDidMount() {                                           //  check userMedia and initialize video
@@ -154,31 +155,30 @@ class Welcome extends Component {
             }, () => {
               clearInterval(countInterval);
               let canv = document.getElementById('canv');
-              canv.width = this.state.videoDimensions.height;
-              canv.height = this.state.videoDimensions.height;
               let startX = -((this.state.videoDimensions.width - this.state.videoDimensions.height) / 2);
               canv.getContext('2d').drawImage(this.video, startX, 0);
               let jpeg = canv.toDataURL("image/jpeg");
 
-              let newCanv = document.createElement('canvas');
-              newCanv.setAttribute('class', 'miniPic');
-              newCanv.width = (canv.width / 4) - 10;
-              newCanv.height = (canv.height / 4) - 10;
-              console.log(newCanv.width, newCanv.height);
-              newCanv.getContext('2d').drawImage(canv, 0, 0, newCanv.width, newCanv.height);
-              let div = document.getElementById('gif-column');
-              div.appendChild(newCanv);
+              this.setState((prevState) => {return {
+                photoArray: prevState.photoArray.concat(jpeg),
+              }}, () => {
+                console.log(this.state.photoArray);
+                let canvases = document.querySelectorAll('.miniPic');
+                console.log(canvases)
+                let newCanv = canvases[canvases.length-1];
+                console.log(newCanv);
+                newCanv.getContext('2d').drawImage(canv, 0, 0, newCanv.width, newCanv.height)
+              })
               resolve(jpeg);
             });
           }
         }, 500);
       })
     }
-    let pic1 = await gifShots();
-    let pic2 = await gifShots();
-    let pic3 = await gifShots();
-    let pic4 = await gifShots();
-    let gifArray = [pic1, pic2, pic3, pic4];
+    for (let j = 0; j < 4; j++) {
+      await gifShots();
+    }
+    let gifArray = this.state.photoArray;
     gifShot.createGIF({
       'images': gifArray,
       'interval': 0.3,
@@ -189,14 +189,9 @@ class Welcome extends Component {
         this.setState({
           gifConfirm: true,
           header: 'Download or Retake!',
-          btnStatus: 'confirm'
+          btnStatus: 'confirm',
+          currentGif: obj.image,
         })
-        this.currentGif = obj.image;
-        let container = document.getElementById('gif-result'),
-        animatedGif = document.createElement('img');
-        animatedGif.setAttribute('id', 'animated-gif');
-        animatedGif.src = this.currentGif;
-        container.appendChild(animatedGif);
       }
     });
     return gifArray;
@@ -241,14 +236,14 @@ class Welcome extends Component {
     console.log(this.state.photoType)
     if (this.state.photoType === 'gif') {
       this.setState({
-        toDownload: this.currentGif,
+        toDownload: this.state.currentGif,
         fileName: 'newGif.gif',
       })
-      a.href = this.currentGif;
+      a.href = this.state.currentGif;
       a.download = 'newGif.gif';
     } else if (this.state.photoType === 'single') {
       this.setState({
-        toDownload: this.currentGif,
+        toDownload: this.state.currentGif,
         fileName: 'newGif.gif',
       })
       a.href = jpeg;
@@ -284,10 +279,22 @@ class Welcome extends Component {
         />
         view = 
           <div className='flex-row'>
-            <div id='gif-column' className='flex-col'></div>
+            <div id='gif-column' className='flex-col'>
+              {this.state.photoArray.map((val, key) => {
+                let canv = document.getElementById('canv');
+                return (
+                  <canvas 
+                    key={val}
+                    height={(canv.height / 4) - 10}
+                    width={(canv.width / 4) - 10}
+                    className='miniPic' 
+                  />
+                )
+              })}
+            </div>
             <div>
               <div id='video-or-gif'>
-              {this.state.gifConfirm ? <div id='gif-result'></div> :
+              {this.state.gifConfirm ? <div id='gif-result'><img id='animated-gif' src={this.state.currentGif}></img></div> :
               <div id='video-div'>
                 {this.state.optionBox}
                 {this.state.countDown ? <div id='countdown-box'>{this.state.count}</div> : null}
@@ -295,7 +302,10 @@ class Welcome extends Component {
               </div>
               }
               </div>
-              <canvas id='canv' style={{display: 'none'}}></canvas>
+              <canvas id='canv' 
+                style={{display: 'none'}}
+                width={this.state.videoDimensions.height}
+                height={this.state.videoDimensions.height}></canvas>
             </div>
           </div>
       }

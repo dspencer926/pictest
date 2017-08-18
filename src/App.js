@@ -16,6 +16,19 @@ class App extends Component {
     }
     this.changePage = this.changePage.bind(this);
     this.setPhotoURL = this.setPhotoURL.bind(this);
+    this.startOver = this.startOver.bind(this);
+  }
+
+  startOver() {
+    console.log('pushed')
+    this.forceUpdate();
+    this.setState({
+      page: 'Reset',
+    }, () => {
+      this.setState({
+        page: 'Welcome'
+      })
+    })
   }
 
   changePage(page) {
@@ -42,20 +55,13 @@ class App extends Component {
           setPhotoURL={this.setPhotoURL}
           />
         break;
-      case 'AfterSnap':
-        view = <AfterSnap 
-          photoURL={this.state.photoURL}
-          />
-        break;
-      case 'AfterSnap':
-        view = <ViewSnap />
-        break;
       case 'Result':
         view = <ViewSnap />
         break;
       }
     return (
       <div className="App">
+        <button id='start-over-btn' className='btn' onClick={this.startOver}> Start Over </button>
         {view}
       </div>
     );

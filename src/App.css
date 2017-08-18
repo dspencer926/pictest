@@ -19,7 +19,6 @@ video {
   display: flex;
   height: 100px;
   width: 100px;
-  appearance: button;
   color: white;
   background-color: gray;
   margin: 0 10px;
@@ -109,4 +108,11 @@ video{
 
 .hidden {
   display: none;
+}
+
+#start-over-btn {
+  position: absolute;
+  left: 2%;
+  top: 2%;
+  height: 50px;
 }
