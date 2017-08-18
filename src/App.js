@@ -12,25 +12,40 @@ class App extends Component {
     this.state = {
       status: null,
       page: 'Welcome',
+      photoURL: null,
     }
     this.changePage = this.changePage.bind(this);
+    this.setPhotoURL = this.setPhotoURL.bind(this);
   }
 
   changePage(page) {
     this.setState({page: page});
   }
 
+  setPhotoURL(url) {
+    this.setState({
+      photoURL: url,
+      page: 'AfterSnap',
+    }, () => {
+      console.log(this.state);
+      console.log('pic set?');
+    })
+  }
+
+
   render() {
     let view;
     switch (this.state.page) {
       case 'Welcome': 
-        view = <Welcome changePage={this.changePage}/>
+        view = <Welcome 
+          changePage={this.changePage}
+          setPhotoURL={this.setPhotoURL}
+          />
         break;
-      case 'OptionPage':
-        view = <OptionPage />
-        break;
-      case 'ViewSnap':
-        view = <ViewSnap />
+      case 'AfterSnap':
+        view = <AfterSnap 
+          photoURL={this.state.photoURL}
+          />
         break;
       case 'AfterSnap':
         view = <ViewSnap />

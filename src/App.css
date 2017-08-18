@@ -19,8 +19,10 @@ video {
   display: flex;
   height: 100px;
   width: 100px;
+  appearance: button;
   color: white;
   background-color: gray;
+  margin: 0 10px;
   align-items: center;
   justify-content: center;
   outline: none;
@@ -33,17 +35,33 @@ video {
   align-items: center;
 }
 
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
 video{ 
   z-index: 1;
+  margin: 0;
 }
 
-#video-div {
+#video-or-gif {
+  margin: 20px;
+
+}
+
+
+#video-div, #gif-result {
   display: flex;
+  align-self: center;
   justify-content: center;
   align-items: center;
+  width: 480px;
+  margin-right: 120px;
+  overflow: hidden;
 }
 
-#option-box {
+#option-box, #countdown-box {
   display: flex;
   position: absolute;
   height: 150px;
@@ -52,8 +70,21 @@ video{
   align-items: center;
   justify-content: center;
   z-index: 2;
-  background-color: white;
   border-radius: 15px;
+}
+
+#option-box {
+  background-color: white;
+}
+
+#countdown-box {
+  color: white;
+  font-size: 3em;
+}
+
+#two-btns {
+  display: flex;
+  flex-direction: row;
 }
 
 .option-btn {
@@ -62,4 +93,20 @@ video{
   background-color: lightblue;
   color: white;
   margin: 10px;
+}
+
+#gif-column {
+  height: 480px;
+  width: 120px;
+  flex: 1;
+  align-self: center;
+  margin-right: auto;
+}
+
+.miniPic {
+  margin: 5px;
+}
+
+.hidden {
+  display: none;
 }
