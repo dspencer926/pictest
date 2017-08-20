@@ -253,9 +253,6 @@ class Welcome extends Component {
   }
 
 
-
-
-
   render() {
     let view;
     let btnBox;
